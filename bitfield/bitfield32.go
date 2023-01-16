@@ -6,7 +6,7 @@ import (
 	"github.com/yehan2002/syncx/internal"
 )
 
-//Bitfield32 a 32-bit bit field
+// Bitfield32 a 32-bit bit field
 type Bitfield32 struct {
 	v uint32
 	_ internal.NoCopy
@@ -40,10 +40,10 @@ func (b *Bitfield32) XOR(v uint32) {
 }
 
 // Clear performs a AND NOT operation
-func (b *Bitfield32) Clear(v uint32) {
+func (b *Bitfield32) Clear(v uint32) (cleared uint32) {
 	for {
 		if tmp := atomic.LoadUint32(&b.v); atomic.CompareAndSwapUint32(&b.v, tmp, tmp&(^v)) {
-			return
+			return tmp & v
 		}
 	}
 }

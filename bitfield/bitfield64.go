@@ -6,7 +6,7 @@ import (
 	"github.com/yehan2002/syncx/internal"
 )
 
-//Bitfield64 a 64-bit bit field
+// Bitfield64 a 64-bit bit field
 type Bitfield64 struct {
 	v uint64
 	_ internal.NoCopy
@@ -40,10 +40,10 @@ func (b *Bitfield64) XOR(v uint64) {
 }
 
 // Clear performs a AND NOT operation
-func (b *Bitfield64) Clear(v uint64) {
+func (b *Bitfield64) Clear(v uint64) (cleared uint64) {
 	for {
 		if tmp := atomic.LoadUint64(&b.v); atomic.CompareAndSwapUint64(&b.v, tmp, tmp&(^v)) {
-			return
+			return tmp & v
 		}
 	}
 }
